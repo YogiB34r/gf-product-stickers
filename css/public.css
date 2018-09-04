@@ -1,0 +1,36 @@
+/*.gf-sticker-sale{*/
+    /*min-height: 3.236em;*/
+    /*min-width: 3.236em;*/
+    /*padding: .202em;*/
+    /*font-size: 1em;*/
+    /*font-weight: 700;*/
+    /*position: absolute;*/
+    /*text-align: center;*/
+    /*line-height: 3.236;*/
+    /*top: -.5em;*/
+    /*left: -.5em;*/
+    /*margin: 0;*/
+    /*border-radius: 100%;*/
+    /*color: #fff;*/
+    /*font-size: .857em;*/
+    /*z-index: 9;*/
+/*}*/
+
+.onsale,
+.is-featured,
+.is-out-of-stock {
+    position: absolute;
+    top: 15px;
+    left: 30px;
+    padding: 4px 8px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.sale .is-featured,
+.sale .is-out-of-stock,
+.featured .is-out-of-stock {
+    top: 55px;
+}
+.sale.featured .is-out-of-stock {
+    top: 95px;
+}
