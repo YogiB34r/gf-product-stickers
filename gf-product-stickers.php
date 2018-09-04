@@ -27,8 +27,8 @@ function gf_product_stickers_admin_scripts()
 {
     if (is_admin()) {
         wp_enqueue_style('gf-product-stickers-admin-css', plugins_url() . '/gf-product-stickers/css/admin.css');
-        wp_register_script('admin-js', plugins_url() . '/gf-product-stickers/js/admin.js', array('jquery'), '', true);
-        wp_enqueue_script('admin-js');
+        wp_register_script('product-stickers-admin-js', plugins_url() . '/gf-product-stickers/js/product-stickers-admin.js', array('jquery'), '', true);
+        wp_enqueue_script('product-stickers-admin-js');
 
     }
 }
