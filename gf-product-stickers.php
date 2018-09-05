@@ -236,11 +236,11 @@ function add_stickers_to_products_new()
     if(!empty(get_option('enable_stickers_select_new')) and get_option('enable_stickers_select_new') == 1){
         global $product;
         if(get_option('image_position_new') == 'left'){
-            $class = 'gf-stickers-left';
+            $class = 'gf-sticker--left';
         }elseif (get_option('image_position_new') == 'center'){
-            $class = 'gf-stickers-center';
+            $class = 'gf-sticker--center';
         }else{
-            $class = 'gf-stickers-right';
+            $class = 'gf-sticker--right';
         }
 
         $postdate = get_the_time('Y-m-d');
@@ -248,7 +248,7 @@ function add_stickers_to_products_new()
         $newness = 10;
         if ((time() - (60 * 60 * 24 * $newness)) < $postdatestamp) {
             //// If the product was published within the newness time frame display the new badge /////
-            echo '<span class="gf-sticker-new '.$class.'"><img src="' . get_option('image_select_new') . '" alt=""></span>';
+            echo '<span class="gf-sticker gf-sticker--new '.$class.'"><img src="' . get_option('image_select_new') . '" alt=""></span>';
         }
     }
 }
@@ -261,11 +261,11 @@ function add_stickers_to_products_soldout()
         global $product;
 
         if(get_option('image_position_soldout') == 'right'){
-            $class = 'gf-stickers-right';
+            $class = 'gf-sticker--right';
         }elseif (get_option('image_position_soldout') == 'left'){
-            $class = 'gf-stickers-left';
+            $class = 'gf-sticker--left';
         }else{
-            $class = 'gf-stickers-center';
+            $class = 'gf-sticker--center';
         }
 
         if ($product->get_type() == 'variable') {
@@ -284,14 +284,14 @@ function add_stickers_to_products_soldout()
             if ($total_qty == 0) {
                 if ($this->sold_product_settings['enable_sold_product_sticker'] == "yes") {
                     if ($this->sold_product_settings['sold_product_custom_sticker'] == '') {
-                        echo '<span class="gf-sticker-soldout '.$class.'"><img src="' . get_option('image_select_soldout') . '" alt=""></span>';
+                        echo '<span class="gf-sticker gf-sticker--soldout '.$class.'"><img src="' . get_option('image_select_soldout') . '" alt=""></span>';
                     }
                 }
             }
 
         } else {
             if (!$product->is_in_stock())
-                echo '<span class="gf-sticker-soldout '.$class.'"><img src="' . get_option('image_select_soldout') . '" alt=""></span>';
+                echo '<span class="gf-sticker gf-sticker--soldout '.$class.'"><img src="' . get_option('image_select_soldout') . '" alt=""></span>';
         }
     }
 }
@@ -301,18 +301,16 @@ function add_stickers_to_products_on_sale($text, $post, $_product)
 {
     if(!empty(get_option('enable_stickers_select_sale')) and get_option('enable_stickers_select_sale') == 1) {
         if (get_option('image_position_sale') == 'right') {
-            $class = 'gf-stickers-right';
+            $class = 'gf-sticker--right';
         } elseif (get_option('image_position_sale') == 'center') {
-            $class = 'gf-stickers-center';
+            $class = 'gf-sticker--center';
         } else {
-            $class = 'gf-stickers-left';
+            $class = 'gf-sticker--left';
         }
-            return '<span class="gf-sticker-sale ' . $class . '"><img src="' . get_option('image_select_sale') . '" alt=""></span>';
+            return '<span class="gf-sticker gf-sticker--sale ' . $class . '"><img src="' . get_option('image_select_sale') . '" alt=""></span>';
     }else {
         remove_action('woocommerce_before_shop_loop_item_title', 'woocommerce_sale_flash', 10);
         remove_action('woocommerce_before_single_product_summary', 'woocommerce_sale_flash', 10);
 
     }
 }
-
-
