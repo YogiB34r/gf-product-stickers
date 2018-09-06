@@ -235,6 +235,7 @@ function add_stickers_to_products_new()
 {
     if(!empty(get_option('enable_stickers_select_new')) and get_option('enable_stickers_select_new') == 1){
         global $product;
+        if ( ! is_object( $product)) $product = wc_get_product( get_the_ID() );
         if(get_option('image_position_new') == 'left'){
             $class = 'gf-stickers-left';
         }elseif (get_option('image_position_new') == 'center'){
@@ -259,6 +260,7 @@ function add_stickers_to_products_soldout()
 {
     if(!empty(get_option('enable_stickers_select_soldout')) and get_option('enable_stickers_select_soldout') == 1){
         global $product;
+        if ( ! is_object( $product)) $product = wc_get_product( get_the_ID() );
 
         if(get_option('image_position_soldout') == 'right'){
             $class = 'gf-stickers-right';
