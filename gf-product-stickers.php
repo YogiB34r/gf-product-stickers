@@ -284,13 +284,8 @@ function add_stickers_to_products_soldout()
 
             }
             if ($total_qty == 0) {
-                if ($this->sold_product_settings['enable_sold_product_sticker'] == "yes") {
-                    if ($this->sold_product_settings['sold_product_custom_sticker'] == '') {
                         echo '<span class="gf-sticker gf-sticker--soldout '.$class.'"><img src="' . get_option('image_select_soldout') . '" alt=""></span>';
                     }
-                }
-            }
-
         } else {
             if (!$product->is_in_stock())
                 echo '<span class="gf-sticker gf-sticker--soldout '.$class.'"><img src="' . get_option('image_select_soldout') . '" alt=""></span>';
