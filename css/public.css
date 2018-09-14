@@ -41,6 +41,10 @@
   width: 30.75% !important;
 }
 
+.gf-sticker--loop-list img {
+  width: 100% !important;
+}
+
 @media only screen and (max-width: 767px) {
   .gf-sticker--center {
     width: 100%;
