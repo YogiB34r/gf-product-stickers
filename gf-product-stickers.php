@@ -322,9 +322,3 @@ function add_stickers_to_products_on_sale($text, $post, $_product)
     }
 
 }
-//if(has_action('woocommerce_before_shop_loop_item_title', 'add_stickers_to_products_soldout', 10) || has_action('woocommerce_before_single_product_summary', 'add_stickers_to_products_soldout', 10)){
-//    remove_action('woocommerce_before_shop_loop_item_title', 'add_stickers_to_products_new', 10);
-//    remove_action('woocommerce_before_single_product_summary', 'add_stickers_to_products_new', 10);
-//
-//    remove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_sale_flash', 10 );
-//}
