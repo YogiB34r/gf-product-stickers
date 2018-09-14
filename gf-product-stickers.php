@@ -298,31 +298,27 @@ function add_stickers_to_products_soldout()
                 }
             }
         }
+    }
+}
 
-        add_filter('woocommerce_sale_flash', 'add_stickers_to_products_on_sale', 10, 3);
-        function add_stickers_to_products_on_sale($text, $post, $_product)
-        {
-            if (!empty(get_option('enable_stickers_select_sale')) and get_option('enable_stickers_select_sale') == 1) {
-                if (get_option('image_position_sale') == 'right') {
-                    $class = 'gf-sticker--right';
-                } elseif (get_option('image_position_sale') == 'center') {
-                    $class = 'gf-sticker--center';
-                } else {
-                    $class = 'gf-sticker--left';
-                }
-                if (add_stickers_to_products_soldout() != true) {
-                    return '<span class="gf-sticker gf-sticker--sale ' . $class . '"><img src="' . get_option('image_select_sale') . '" alt=""></span>';
-                }
-
-            } else {
-                remove_action('woocommerce_before_shop_loop_item_title', 'woocommerce_sale_flash', 10);
-                remove_action('woocommerce_before_single_product_summary', 'woocommerce_sale_flash', 10);
-            }
-
+add_filter('woocommerce_sale_flash', 'add_stickers_to_products_on_sale', 10, 3);
+function add_stickers_to_products_on_sale($text, $post, $_product)
+{
+    if (!empty(get_option('enable_stickers_select_sale')) and get_option('enable_stickers_select_sale') == 1) {
+        if (get_option('image_position_sale') == 'right') {
+            $class = 'gf-sticker--right';
+        } elseif (get_option('image_position_sale') == 'center') {
+            $class = 'gf-sticker--center';
+        } else {
+            $class = 'gf-sticker--left';
         }
-//if(has_action('woocommerce_before_shop_loop_item_title', 'add_stickers_to_products_soldout', 10) || has_action('woocommerce_before_single_product_summary', 'add_stickers_to_products_soldout', 10)){
-//    remove_action('woocommerce_before_shop_loop_item_title', 'add_stickers_to_products_new', 10);
-//    remove_action('woocommerce_before_single_product_summary', 'add_stickers_to_products_new', 10);
-//
-//    remove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_sale_flash', 10 );
-//}
+        if (add_stickers_to_products_soldout() != true) {
+            return '<span class="gf-sticker gf-sticker--sale ' . $class . '"><img src="' . get_option('image_select_sale') . '" alt=""></span>';
+        }
+
+    } else {
+        remove_action('woocommerce_before_shop_loop_item_title', 'woocommerce_sale_flash', 10);
+        remove_action('woocommerce_before_single_product_summary', 'woocommerce_sale_flash', 10);
+    }
+
+}
