@@ -83,7 +83,7 @@ function gf_product_stickers_options_page()
             <?php do_settings_sections('gf-product-stickers-settings-group'); ?>
 
             <div class="admin-module">
-                <div class="row">
+                <div class="row gf-stickers-wrapper">
                     <h3>Novi proizvodi</h3>
                     <div class="row">
                         <div class="row">
@@ -130,7 +130,7 @@ function gf_product_stickers_options_page()
                                value="<?= get_option('image_select_new') ?>">
                     </div>
                 </div>
-                <div class="row">
+                <div class="row gf-stickers-wrapper">
                     <div class="row">
                         <h3>Rasprodati proizvodi</h3>
                         <div class="row">
@@ -175,7 +175,7 @@ function gf_product_stickers_options_page()
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row gf-stickers-wrapper">
                     <div class="row">
                         <h3>Proizvodi na akciji</h3>
                         <div class="row">
@@ -233,23 +233,23 @@ add_action('woocommerce_before_shop_loop_item_title', 'add_stickers_to_products_
 add_action('woocommerce_before_single_product_summary', 'add_stickers_to_products_new', 10);
 function add_stickers_to_products_new()
 {
-    if(!empty(get_option('enable_stickers_select_new')) and get_option('enable_stickers_select_new') == 1){
+    if (!empty(get_option('enable_stickers_select_new')) and get_option('enable_stickers_select_new') == 1) {
         global $product;
-        if ( ! is_object( $product)) $product = wc_get_product( get_the_ID() );
-        if(get_option('image_position_new') == 'left'){
+        if (!is_object($product)) $product = wc_get_product(get_the_ID());
+        if (get_option('image_position_new') == 'left') {
             $class = 'gf-sticker--left';
-        }elseif (get_option('image_position_new') == 'center'){
+        } elseif (get_option('image_position_new') == 'center') {
             $class = 'gf-sticker--center';
-        }else{
+        } else {
             $class = 'gf-sticker--right';
         }
 
         $postdate = get_the_time('Y-m-d');
         $postdatestamp = strtotime($postdate);
         $newness = 10;
-        if ((time() - (60 * 60 * 24 * $newness)) < $postdatestamp) {
+        if ((time() - (60 * 60 * 24 * $newness)) < $postdatestamp && !$product->is_on_sale() && add_stickers_to_products_soldout() != true) {
             //// If the product was published within the newness time frame display the new badge /////
-            echo '<span class="gf-sticker gf-sticker--new '.$class.'"><img src="' . get_option('image_select_new') . '" alt=""></span>';
+            echo '<span class="gf-sticker gf-sticker--new ' . $class . '"><img src="' . get_option('image_select_new') . '" alt=""></span>';
         }
     }
 }
@@ -258,15 +258,15 @@ add_action('woocommerce_before_shop_loop_item_title', 'add_stickers_to_products_
 add_action('woocommerce_before_single_product_summary', 'add_stickers_to_products_soldout', 10);
 function add_stickers_to_products_soldout()
 {
-    if(!empty(get_option('enable_stickers_select_soldout')) and get_option('enable_stickers_select_soldout') == 1){
+    if (!empty(get_option('enable_stickers_select_soldout')) and get_option('enable_stickers_select_soldout') == 1) {
         global $product;
-        if ( ! is_object( $product)) $product = wc_get_product( get_the_ID() );
+        if (!is_object($product)) $product = wc_get_product(get_the_ID());
 
-        if(get_option('image_position_soldout') == 'right'){
+        if (get_option('image_position_soldout') == 'right') {
             $class = 'gf-sticker--right';
-        }elseif (get_option('image_position_soldout') == 'left'){
+        } elseif (get_option('image_position_soldout') == 'left') {
             $class = 'gf-sticker--left';
-        }else{
+        } else {
             $class = 'gf-sticker--center';
         }
 
@@ -286,14 +286,17 @@ function add_stickers_to_products_soldout()
             if ($total_qty == 0) {
                 if ($this->sold_product_settings['enable_sold_product_sticker'] == "yes") {
                     if ($this->sold_product_settings['sold_product_custom_sticker'] == '') {
-                        echo '<span class="gf-sticker gf-sticker--soldout '.$class.'"><img src="' . get_option('image_select_soldout') . '" alt=""></span>';
+                        echo '<span class="gf-sticker gf-sticker--soldout ' . $class . '"><img src="' . get_option('image_select_soldout') . '" alt=""></span>';
+                        return true;
                     }
                 }
             }
 
         } else {
-            if (!$product->is_in_stock())
-                echo '<span class="gf-sticker gf-sticker--soldout '.$class.'"><img src="' . get_option('image_select_soldout') . '" alt=""></span>';
+            if (!$product->is_in_stock()) {
+                echo '<span class="gf-sticker gf-sticker--soldout ' . $class . '"><img src="' . get_option('image_select_soldout') . '" alt=""></span>';
+                return true;
+            }
         }
     }
 }
@@ -301,7 +304,7 @@ function add_stickers_to_products_soldout()
 add_filter('woocommerce_sale_flash', 'add_stickers_to_products_on_sale', 10, 3);
 function add_stickers_to_products_on_sale($text, $post, $_product)
 {
-    if(!empty(get_option('enable_stickers_select_sale')) and get_option('enable_stickers_select_sale') == 1) {
+    if (!empty(get_option('enable_stickers_select_sale')) and get_option('enable_stickers_select_sale') == 1) {
         if (get_option('image_position_sale') == 'right') {
             $class = 'gf-sticker--right';
         } elseif (get_option('image_position_sale') == 'center') {
@@ -309,10 +312,19 @@ function add_stickers_to_products_on_sale($text, $post, $_product)
         } else {
             $class = 'gf-sticker--left';
         }
+        if (add_stickers_to_products_soldout() != true) {
             return '<span class="gf-sticker gf-sticker--sale ' . $class . '"><img src="' . get_option('image_select_sale') . '" alt=""></span>';
-    }else {
+        }
+
+    } else {
         remove_action('woocommerce_before_shop_loop_item_title', 'woocommerce_sale_flash', 10);
         remove_action('woocommerce_before_single_product_summary', 'woocommerce_sale_flash', 10);
-
     }
+
 }
+//if(has_action('woocommerce_before_shop_loop_item_title', 'add_stickers_to_products_soldout', 10) || has_action('woocommerce_before_single_product_summary', 'add_stickers_to_products_soldout', 10)){
+//    remove_action('woocommerce_before_shop_loop_item_title', 'add_stickers_to_products_new', 10);
+//    remove_action('woocommerce_before_single_product_summary', 'add_stickers_to_products_new', 10);
+//
+//    remove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_sale_flash', 10 );
+//}
