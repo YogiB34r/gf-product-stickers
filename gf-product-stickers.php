@@ -284,7 +284,7 @@ function add_stickers_to_products_soldout()
 }
 
 add_filter('woocommerce_sale_flash', 'add_stickers_to_products_on_sale', 10, 3);
-function add_stickers_to_products_on_sale($_product)
+function add_stickers_to_products_on_sale($a, $b, $_product)
 {
     global $stickerConfig;
 //    $enable_stickers_select_sale_option = get_option('enable_stickers_select_sale');
