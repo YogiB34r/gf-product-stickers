@@ -36,7 +36,7 @@ function gf_product_stickers_admin_scripts()
 //add_action('admin_enqueue_scripts', 'gf_product_stickers_admin_scripts');
 function gf_public_css()
 {
-    wp_enqueue_style('gf-product-stickers-public-css', plugins_url() . '/gf-product-stickers/css/public.css');
+//    wp_enqueue_style('gf-product-stickers-public-css', plugins_url() . '/gf-product-stickers/css/public.css');
 }
 
 //add_action('wp_enqueue_scripts', 'gf_public_css');
