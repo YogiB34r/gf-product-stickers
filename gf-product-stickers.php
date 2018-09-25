@@ -233,16 +233,16 @@ $stickerConfig = [
     'image_select_new' => get_option('image_select_new'),
     'image_position_soldout_option' => get_option('image_position_soldout'),
     'image_select_soldout' => get_option('image_select_soldout'),
-    'image_position_sale_option' => get_option('image_position_sale')
+    'image_position_sale_option' => get_option('image_position_sale'),
+    'image_select_sale' => get_option('image_select_sale')
 ];
 
 add_action('woocommerce_before_shop_loop_item_title', 'add_stickers_to_products_new', 10);
 add_action('woocommerce_before_single_product_summary', 'add_stickers_to_products_new', 10);
-function add_stickers_to_products_new()
+function add_stickers_to_products_new(WC_Product $product = null)
 {
-//    $enable_stickers_select_new_option = get_option('enable_stickers_select_new');
-//    if (!empty($enable_stickers_select_new_option) and $enable_stickers_select_new_option == 1) {
     global $product, $stickerConfig;
+
     if (!is_object($product)) $product = wc_get_product(get_the_ID());
 
     if ($stickerConfig['image_position_new_option'] === 'left') {
@@ -254,21 +254,17 @@ function add_stickers_to_products_new()
     }
 
     $postdatestamp = strtotime(get_the_time('Y-m-d'));
-    $newness = 10;
+    $newness = 15;
     if ((time() - (60 * 60 * 24 * $newness)) < $postdatestamp && !$product->is_on_sale() && !gf_is_product_sold_out($product)) {
         //// If the product was published within the newness time frame display the new badge /////
         echo '<span class="gf-sticker gf-sticker--new ' . $class . '"><img src="' . $stickerConfig['image_select_new'] . '" alt=""></span>';
     }
-//    }
 }
 
 add_action('woocommerce_before_shop_loop_item_title', 'add_stickers_to_products_soldout', 10);
 add_action('woocommerce_before_single_product_summary', 'add_stickers_to_products_soldout', 10);
-function add_stickers_to_products_soldout()
-{
-//    if (!empty(get_option('enable_stickers_select_soldout')) and get_option('enable_stickers_select_soldout') == 1) {
-    global $product, $stickerConfig;
-    if (!is_object($product)) $product = wc_get_product(get_the_ID());
+function add_stickers_to_products_soldout($classes) {
+    global $stickerConfig;
 
     if ($stickerConfig['image_position_soldout_option'] === 'right') {
         $class = 'gf-sticker--right';
@@ -277,18 +273,15 @@ function add_stickers_to_products_soldout()
     } else {
         $class = 'gf-sticker--center';
     }
-    if (gf_is_product_sold_out($product)) {
+    if (strstr($classes, 'outofstock')) {
         echo '<span class="gf-sticker gf-sticker--soldout ' . $class . '"><img src="' . $stickerConfig['image_select_soldout'] . '" alt=""></span>';
     }
-//    }
 }
 
 add_filter('woocommerce_sale_flash', 'add_stickers_to_products_on_sale', 10, 3);
-function add_stickers_to_products_on_sale($a, $b, $_product)
+function add_stickers_to_products_on_sale()
 {
     global $stickerConfig;
-//    $enable_stickers_select_sale_option = get_option('enable_stickers_select_sale');
-//    if (!empty($enable_stickers_select_sale_option) and $enable_stickers_select_sale_option == 1) {
     if ($stickerConfig['image_position_sale_option'] === 'right') {
         $class = 'gf-sticker--right';
     } elseif ($stickerConfig['image_position_sale_option'] === 'center') {
@@ -296,24 +289,28 @@ function add_stickers_to_products_on_sale($a, $b, $_product)
     } else {
         $class = 'gf-sticker--left';
     }
-    if (!gf_is_product_sold_out($_product)) {
-        return '<span class="gf-sticker gf-sticker--sale ' . $class . '"><img src="' . get_option('image_select_sale') . '" alt=""></span>';
+    ob_start();
+    wc_product_class();
+    $classes = ob_get_clean();
+    if (strstr($classes, 'sale') && !strstr($classes, 'outofstock')) {
+        return '<span class="gf-sticker gf-sticker--sale ' . $class . '"><img src="' . $stickerConfig['image_select_sale'] . '" alt=""></span>';
     }
-//    } else {
-//        remove_action('woocommerce_before_shop_loop_item_title', 'woocommerce_sale_flash', 10);
-//        remove_action('woocommerce_before_single_product_summary', 'woocommerce_sale_flash', 10);
-//    }
+    return '';
 }
 
-function gf_is_product_sold_out(WC_Product $product) {
+function gf_is_product_sold_out($product) {
     if ($product->get_type() === 'variable') {
-        $inStock = false;
-        foreach ($product->get_available_variations() as $variation) {
-            if ($variation['is_in_stock']) {
-                $inStock = true;
-                break;
-            }
+        $inStock = true;
+        if ($product->get_stock_status() !== 'instock') {
+            $inStock = false;
         }
+
+//        foreach ($product->get_available_variations() as $variation) {
+//            if ($variation['is_in_stock']) {
+//                $inStock = true;
+//                break;
+//            }
+//        }
         if (!$inStock) {
             return true;
         }
