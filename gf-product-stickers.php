@@ -239,7 +239,7 @@ $stickerConfig = [
 
 add_action('woocommerce_before_shop_loop_item_title', 'add_stickers_to_products_new', 10);
 add_action('woocommerce_before_single_product_summary', 'add_stickers_to_products_new', 10);
-function add_stickers_to_products_new(WC_Product $product = null)
+function add_stickers_to_products_new($product = null)
 {
     global $product, $stickerConfig;
 
