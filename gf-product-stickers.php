@@ -90,7 +90,7 @@ function gf_product_stickers_options_page()
                             <label for="new_product_time">Vreme trajanja novog proizvoda</label>
                             <input type="number" name="new_product_time">
                         </div>
-                        <label for="enable_stickers_select_new">Uključi nalepnice:</label>
+                        <label for="enable_stickers_select_new">Ukljuci nalepnice:</label>
                         <select name="enable_stickers_select_new">
                             <option value="0" <?php if (get_option('enable_stickers_select_new') == 0) {
                                 echo 'selected';
@@ -120,21 +120,23 @@ function gf_product_stickers_options_page()
                         </select>
                     </div>
                     <div class="row">
-                        <div><img src="<?= get_option('image_select_new') ?>" alt=""></div>
+                        <?php $get_option_new = get_option('image_select_new')?>
+                        <?php list($width_new, $height_new) = getimagesize(get_option('image_select_new')); ?>
+                        <div><img src="<?=$get_option_new?>" alt="" width="<?=$width_new?>" height="<?=$height_new?>"></div>
                         <input class="gf-upload-sticker-image-new"
                                id="upload-sticker-image-new"
                                name="image_select_new_button"
                                type="button"
                                value="Izaberite sliku">
                         <input type="hidden" class="image_select_new" name="image_select_new"
-                               value="<?= get_option('image_select_new') ?>">
+                               value="<?= $get_option_new ?>">
                     </div>
                 </div>
                 <div class="row gf-stickers-wrapper">
                     <div class="row">
                         <h3>Rasprodati proizvodi</h3>
                         <div class="row">
-                            <label for="enable_stickers_select_soldout">Uključi nalepnice:</label>
+                            <label for="enable_stickers_select_soldout">Ukljuci nalepnice:</label>
                             <select name="enable_stickers_select_soldout">
                                 <option value="0" <?php if (get_option('enable_stickers_select_soldout') == 0) {
                                     echo 'selected';
@@ -164,14 +166,16 @@ function gf_product_stickers_options_page()
                             </select>
                         </div>
                         <div class="row">
-                            <div><img src="<?= get_option('image_select_soldout') ?>" alt=""></div>
+                            <?php $get_option_soldout = get_option('image_select_soldout')?>
+                            <?php list($width_soldout, $height_soldout) = getimagesize($get_option_soldout); ?>
+                            <div><img src="<?= $get_option_soldout ?>" alt="" width="<?=$width_soldout?>" height="<?=$height_soldout?>"></div>
                             <input class="gf-upload-sticker-image-soldout"
                                    id="upload-sticker-image-soldout"
                                    name="image_select_soldout_button"
                                    type="button"
                                    value="Izaberite sliku">
                             <input type="hidden" class="image_select_soldout" name="image_select_soldout"
-                                   value="<?= get_option('image_select_soldout') ?>">
+                                   value="<?=$get_option_soldout?>">
                         </div>
                     </div>
                 </div>
@@ -179,7 +183,7 @@ function gf_product_stickers_options_page()
                     <div class="row">
                         <h3>Proizvodi na akciji</h3>
                         <div class="row">
-                            <label for="enable_stickers_select_sale">Uključi nalepnice:</label>
+                            <label for="enable_stickers_select_sale">Ukljuci nalepnice:</label>
                             <select name="enable_stickers_select_sale">
                                 <option value="0" <?php if (get_option('enable_stickers_select_sale') == 0) {
                                     echo 'selected';
@@ -209,14 +213,16 @@ function gf_product_stickers_options_page()
                             </select>
                         </div>
                         <div class="row">
-                            <div><img src="<?= get_option('image_select_sale') ?>" alt=""></div>
+                            <?php $get_option_sale = get_option('image_select_sale')?>
+                            <?php list($width_sale, $height_sale) = getimagesize($get_option_sale); ?>
+                            <div><img src="<?=$get_option_sale?>" alt="" width="<?=$width_sale?>" height="<?=$height_sale?>"></div>
                             <input class="gf-upload-sticker-image-sale"
                                    id="upload-sticker-image-sale"
                                    name="image_select_sale_button"
                                    type="button"
                                    value="Izaberite sliku">
                             <input type="hidden" class="image_select_sale" name="image_select_sale"
-                                   value="<?= get_option('image_select_sale') ?>">
+                                   value="<?=$get_option_sale?>">
                         </div>
                     </div>
                 </div>
@@ -233,16 +239,16 @@ $stickerConfig = [
     'image_select_new' => get_option('image_select_new'),
     'image_position_soldout_option' => get_option('image_position_soldout'),
     'image_select_soldout' => get_option('image_select_soldout'),
-    'image_position_sale_option' => get_option('image_position_sale')
+    'image_position_sale_option' => get_option('image_position_sale'),
+    'image_select_sale' => get_option('image_select_sale')
 ];
 
 add_action('woocommerce_before_shop_loop_item_title', 'add_stickers_to_products_new', 10);
 add_action('woocommerce_before_single_product_summary', 'add_stickers_to_products_new', 10);
-function add_stickers_to_products_new()
+function add_stickers_to_products_new($product = null)
 {
-//    $enable_stickers_select_new_option = get_option('enable_stickers_select_new');
-//    if (!empty($enable_stickers_select_new_option) and $enable_stickers_select_new_option == 1) {
     global $product, $stickerConfig;
+
     if (!is_object($product)) $product = wc_get_product(get_the_ID());
 
     if ($stickerConfig['image_position_new_option'] === 'left') {
@@ -254,21 +260,18 @@ function add_stickers_to_products_new()
     }
 
     $postdatestamp = strtotime(get_the_time('Y-m-d'));
-    $newness = 10;
+    $newness = 15;
     if ((time() - (60 * 60 * 24 * $newness)) < $postdatestamp && !$product->is_on_sale() && !gf_is_product_sold_out($product)) {
         //// If the product was published within the newness time frame display the new badge /////
-        echo '<span class="gf-sticker gf-sticker--new ' . $class . '"><img src="' . $stickerConfig['image_select_new'] . '" alt=""></span>';
+        echo '<span class="gf-sticker gf-sticker--new ' . $class . '"><img src="' . $stickerConfig['image_select_new'] . '" alt="New Product Sticker" width="54" height="54"></span>';
     }
-//    }
 }
 
 add_action('woocommerce_before_shop_loop_item_title', 'add_stickers_to_products_soldout', 10);
 add_action('woocommerce_before_single_product_summary', 'add_stickers_to_products_soldout', 10);
-function add_stickers_to_products_soldout()
+function add_stickers_to_products_soldout($classes)
 {
-//    if (!empty(get_option('enable_stickers_select_soldout')) and get_option('enable_stickers_select_soldout') == 1) {
-    global $product, $stickerConfig;
-    if (!is_object($product)) $product = wc_get_product(get_the_ID());
+    global $stickerConfig;
 
     if ($stickerConfig['image_position_soldout_option'] === 'right') {
         $class = 'gf-sticker--right';
@@ -277,18 +280,15 @@ function add_stickers_to_products_soldout()
     } else {
         $class = 'gf-sticker--center';
     }
-    if (gf_is_product_sold_out($product)) {
-        echo '<span class="gf-sticker gf-sticker--soldout ' . $class . '"><img src="' . $stickerConfig['image_select_soldout'] . '" alt=""></span>';
+    if (strstr($classes, 'outofstock')) {
+        echo '<span class="gf-sticker gf-sticker--soldout ' . $class . '"><img src="' . $stickerConfig['image_select_soldout'] . '" alt="" width="200" height="47"></span>';
     }
-//    }
 }
 
 add_filter('woocommerce_sale_flash', 'add_stickers_to_products_on_sale', 10, 3);
-function add_stickers_to_products_on_sale($a, $b, $_product)
+function add_stickers_to_products_on_sale()
 {
     global $stickerConfig;
-//    $enable_stickers_select_sale_option = get_option('enable_stickers_select_sale');
-//    if (!empty($enable_stickers_select_sale_option) and $enable_stickers_select_sale_option == 1) {
     if ($stickerConfig['image_position_sale_option'] === 'right') {
         $class = 'gf-sticker--right';
     } elseif ($stickerConfig['image_position_sale_option'] === 'center') {
@@ -296,24 +296,29 @@ function add_stickers_to_products_on_sale($a, $b, $_product)
     } else {
         $class = 'gf-sticker--left';
     }
-    if (!gf_is_product_sold_out($_product)) {
-        return '<span class="gf-sticker gf-sticker--sale ' . $class . '"><img src="' . get_option('image_select_sale') . '" alt=""></span>';
+    ob_start();
+    wc_product_class();
+    $classes = ob_get_clean();
+    if (strstr($classes, 'sale') && !strstr($classes, 'outofstock')) {
+        return '<span class="gf-sticker gf-sticker--sale ' . $class . '"><img src="' . $stickerConfig['image_select_sale'] . '" alt="" height="64" width="64"></span>';
     }
-//    } else {
-//        remove_action('woocommerce_before_shop_loop_item_title', 'woocommerce_sale_flash', 10);
-//        remove_action('woocommerce_before_single_product_summary', 'woocommerce_sale_flash', 10);
-//    }
+    return '';
 }
 
-function gf_is_product_sold_out(WC_Product $product) {
+function gf_is_product_sold_out($product)
+{
     if ($product->get_type() === 'variable') {
-        $inStock = false;
-        foreach ($product->get_available_variations() as $variation) {
-            if ($variation['is_in_stock']) {
-                $inStock = true;
-                break;
-            }
+        $inStock = true;
+        if ($product->get_stock_status() !== 'instock') {
+            $inStock = false;
         }
+
+//        foreach ($product->get_available_variations() as $variation) {
+//            if ($variation['is_in_stock']) {
+//                $inStock = true;
+//                break;
+//            }
+//        }
         if (!$inStock) {
             return true;
         }
