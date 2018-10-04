@@ -257,7 +257,7 @@ function add_stickers_to_products_new()
     $newness = 10;
     if ((time() - (60 * 60 * 24 * $newness)) < $postdatestamp && !$product->is_on_sale() && !gf_is_product_sold_out($product)) {
         //// If the product was published within the newness time frame display the new badge /////
-        echo '<span class="gf-sticker gf-sticker--new ' . $class . '"><img src="' . $stickerConfig['image_select_new'] . '" alt=""></span>';
+        echo '<span class="gf-sticker gf-sticker--new ' . $class . '"><img src="' . $stickerConfig['image_select_new'] . '" alt="New Product Sticker" width="54" height="54"></span>';
     }
 //    }
 }
@@ -278,7 +278,7 @@ function add_stickers_to_products_soldout()
         $class = 'gf-sticker--center';
     }
     if (gf_is_product_sold_out($product)) {
-        echo '<span class="gf-sticker gf-sticker--soldout ' . $class . '"><img src="' . $stickerConfig['image_select_soldout'] . '" alt=""></span>';
+        echo '<span class="gf-sticker gf-sticker--soldout ' . $class . '"><img src="' . $stickerConfig['image_select_soldout'] . '" alt="Soldout image sticker" width="200" height="47"></span>';
     }
 //    }
 }
@@ -297,7 +297,7 @@ function add_stickers_to_products_on_sale($a, $b, $_product)
         $class = 'gf-sticker--left';
     }
     if (!gf_is_product_sold_out($_product)) {
-        return '<span class="gf-sticker gf-sticker--sale ' . $class . '"><img src="' . get_option('image_select_sale') . '" alt=""></span>';
+        return '<span class="gf-sticker gf-sticker--sale ' . $class . '"><img src="' . get_option('image_select_sale') . '" alt="Sale image sticker"  width="64" height="64"></span>';
     }
 //    } else {
 //        remove_action('woocommerce_before_shop_loop_item_title', 'woocommerce_sale_flash', 10);
