@@ -90,7 +90,7 @@ function gf_product_stickers_options_page()
                             <label for="new_product_time">Vreme trajanja novog proizvoda</label>
                             <input type="number" name="new_product_time">
                         </div>
-                        <label for="enable_stickers_select_new">Uključi nalepnice:</label>
+                        <label for="enable_stickers_select_new">Ukljuci nalepnice:</label>
                         <select name="enable_stickers_select_new">
                             <option value="0" <?php if (get_option('enable_stickers_select_new') == 0) {
                                 echo 'selected';
@@ -120,21 +120,23 @@ function gf_product_stickers_options_page()
                         </select>
                     </div>
                     <div class="row">
-                        <div><img src="<?= get_option('image_select_new') ?>" alt=""></div>
+                        <?php $get_option_new = get_option('image_select_new')?>
+                        <?php list($width_new, $height_new) = getimagesize(get_option('image_select_new')); ?>
+                        <div><img src="<?=$get_option_new?>" alt="" width="<?=$width_new?>" height="<?=$height_new?>"></div>
                         <input class="gf-upload-sticker-image-new"
                                id="upload-sticker-image-new"
                                name="image_select_new_button"
                                type="button"
                                value="Izaberite sliku">
                         <input type="hidden" class="image_select_new" name="image_select_new"
-                               value="<?= get_option('image_select_new') ?>">
+                               value="<?= $get_option_new ?>">
                     </div>
                 </div>
                 <div class="row gf-stickers-wrapper">
                     <div class="row">
                         <h3>Rasprodati proizvodi</h3>
                         <div class="row">
-                            <label for="enable_stickers_select_soldout">Uključi nalepnice:</label>
+                            <label for="enable_stickers_select_soldout">Ukljuci nalepnice:</label>
                             <select name="enable_stickers_select_soldout">
                                 <option value="0" <?php if (get_option('enable_stickers_select_soldout') == 0) {
                                     echo 'selected';
@@ -164,14 +166,16 @@ function gf_product_stickers_options_page()
                             </select>
                         </div>
                         <div class="row">
-                            <div><img src="<?= get_option('image_select_soldout') ?>" alt=""></div>
+                            <?php $get_option_soldout = get_option('image_select_soldout')?>
+                            <?php list($width_soldout, $height_soldout) = getimagesize($get_option_soldout); ?>
+                            <div><img src="<?= $get_option_soldout ?>" alt="" width="<?=$width_soldout?>" height="<?=$height_soldout?>"></div>
                             <input class="gf-upload-sticker-image-soldout"
                                    id="upload-sticker-image-soldout"
                                    name="image_select_soldout_button"
                                    type="button"
                                    value="Izaberite sliku">
                             <input type="hidden" class="image_select_soldout" name="image_select_soldout"
-                                   value="<?= get_option('image_select_soldout') ?>">
+                                   value="<?=$get_option_soldout?>">
                         </div>
                     </div>
                 </div>
@@ -179,7 +183,7 @@ function gf_product_stickers_options_page()
                     <div class="row">
                         <h3>Proizvodi na akciji</h3>
                         <div class="row">
-                            <label for="enable_stickers_select_sale">Uključi nalepnice:</label>
+                            <label for="enable_stickers_select_sale">Ukljuci nalepnice:</label>
                             <select name="enable_stickers_select_sale">
                                 <option value="0" <?php if (get_option('enable_stickers_select_sale') == 0) {
                                     echo 'selected';
@@ -209,14 +213,16 @@ function gf_product_stickers_options_page()
                             </select>
                         </div>
                         <div class="row">
-                            <div><img src="<?= get_option('image_select_sale') ?>" alt=""></div>
+                            <?php $get_option_sale = get_option('image_select_sale')?>
+                            <?php list($width_sale, $height_sale) = getimagesize($get_option_sale); ?>
+                            <div><img src="<?=$get_option_sale?>" alt="" width="<?=$width_sale?>" height="<?=$height_sale?>"></div>
                             <input class="gf-upload-sticker-image-sale"
                                    id="upload-sticker-image-sale"
                                    name="image_select_sale_button"
                                    type="button"
                                    value="Izaberite sliku">
                             <input type="hidden" class="image_select_sale" name="image_select_sale"
-                                   value="<?= get_option('image_select_sale') ?>">
+                                   value="<?=$get_option_sale?>">
                         </div>
                     </div>
                 </div>
