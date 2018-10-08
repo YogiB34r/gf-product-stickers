@@ -285,7 +285,7 @@ function add_stickers_to_products_soldout($classes)
 }
 
 add_filter('woocommerce_sale_flash', 'add_stickers_to_products_on_sale', 10, 3);
-function add_stickers_to_products_on_sale()
+function add_stickers_to_products_on_sale($classes = null)
 {
     global $stickerConfig;
     if ($stickerConfig['image_position_sale_option'] === 'right') {
@@ -295,9 +295,12 @@ function add_stickers_to_products_on_sale()
     } else {
         $class = 'gf-sticker--left';
     }
-    ob_start();
-    wc_product_class();
-    $classes = ob_get_clean();
+    if (!$classes) {
+        ob_start();
+        wc_product_class();
+        $classes = ob_get_clean();
+    }
+
     if (strstr($classes, 'sale') && !strstr($classes, 'outofstock')) {
         return '<span class="gf-sticker gf-sticker--sale ' . $class . '"><img src="' . $stickerConfig['image_select_sale'] . '" alt="" height="64" width="64"></span>';
     }
