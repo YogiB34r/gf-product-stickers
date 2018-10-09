@@ -280,7 +280,7 @@ function add_stickers_to_products_soldout($classes)
         $class = 'gf-sticker--center';
     }
     if (strstr($classes, 'outofstock')) {
-        echo '<span class="gf-sticker gf-sticker--soldout ' . $class . '"><img src="' . $stickerConfig['image_select_soldout'] . '" alt="" width="200" height="47"></span>';
+        return '<span class="gf-sticker gf-sticker--soldout ' . $class . '"><img src="' . $stickerConfig['image_select_soldout'] . '" alt="" width="200" height="47"></span>';
     }
 }
 
