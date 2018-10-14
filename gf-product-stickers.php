@@ -279,8 +279,14 @@ function add_stickers_to_products_soldout($classes)
     } else {
         $class = 'gf-sticker--center';
     }
+    if (!$classes || strstr($classes, 'span')) {
+        ob_start();
+        wc_product_class();
+        $classes = ob_get_clean();
+    }
+
     if (strstr($classes, 'outofstock')) {
-        return '<span class="gf-sticker gf-sticker--soldout ' . $class . '"><img src="' . $stickerConfig['image_select_soldout'] . '" alt="" width="200" height="47"></span>';
+        echo '<span class="gf-sticker gf-sticker--soldout ' . $class . '"><img src="' . $stickerConfig['image_select_soldout'] . '" alt="" width="200" height="47"></span>';
     }
 }
 
@@ -295,7 +301,7 @@ function add_stickers_to_products_on_sale($classes = null)
     } else {
         $class = 'gf-sticker--left';
     }
-    if (!$classes) {
+    if (!$classes || strstr($classes, 'span')) {
         ob_start();
         wc_product_class();
         $classes = ob_get_clean();
