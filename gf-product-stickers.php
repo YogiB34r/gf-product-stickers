@@ -310,8 +310,7 @@ function add_stickers_to_products_on_sale($classes = null)
     var_dump($product->get_id());
     $product_sale_from_date = get_post_meta($product->get_id(), '_sale_price_dates_from', true );
     $product_sale_to_date = get_post_meta($product->get_id(),  '_sale_price_dates_to', true );
-    var_dump($product_sale_from_date);
-    var_dump(date( "d/m/y", $product_sale_from_date ));
+    
 
     if (strstr($classes, 'sale') && !strstr($classes, 'outofstock')) {
         if($product_sale_from_date !== '' && $product_sale_to_date !== '') {
