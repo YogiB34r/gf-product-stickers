@@ -307,11 +307,9 @@ function add_stickers_to_products_on_sale($classes = null)
         $classes = ob_get_clean();
     }
     global $product;
-    var_dump($product->get_id());
     $product_sale_from_date = get_post_meta($product->get_id(), '_sale_price_dates_from', true );
     $product_sale_to_date = get_post_meta($product->get_id(),  '_sale_price_dates_to', true );
     
-
     if (strstr($classes, 'sale') && !strstr($classes, 'outofstock')) {
         if($product_sale_from_date !== '' && $product_sale_to_date !== '') {
             return '<span class="gf-sticker gf-sticker--sale ' . $class . '"><img src="' . $stickerConfig['image_select_sale'] . '" alt="" height="64" width="64"></span>';
