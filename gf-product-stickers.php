@@ -284,9 +284,12 @@ function add_stickers_to_products_soldout($classes)
         wc_product_class();
         $classes = ob_get_clean();
     }
+    if (!is_product()) {
+        $class .= " gf-sticker--loop-grid ";
+    }
 
     if (strstr($classes, 'outofstock')) {
-        echo '<span class="gf-sticker gf-sticker--soldout ' . $class . '"><img src="' . $stickerConfig['image_select_soldout'] . '" alt="" width="200" height="47"></span>';
+        echo '<span class="gf-sticker gf-sticker--soldout ' . $class . ' "><img src="' . $stickerConfig['image_select_soldout'] . '" alt="" width="200" height="47"></span>';
     }
 }
 
