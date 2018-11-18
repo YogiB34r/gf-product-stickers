@@ -32,12 +32,14 @@ function gf_product_stickers_admin_scripts()
 
     }
 }
+
 //add_action('admin_enqueue_scripts', 'gf_product_stickers_admin_scripts');
 
 function gf_public_css()
 {
     wp_enqueue_style('gf-product-stickers-public-css', plugins_url() . '/gf-product-stickers/css/public.css');
 }
+
 add_action('wp_enqueue_scripts', 'gf_public_css');
 
 function gf_product_stickers_options_create_menu()
@@ -119,9 +121,10 @@ function gf_product_stickers_options_page()
                         </select>
                     </div>
                     <div class="row">
-                        <?php $get_option_new = get_option('image_select_new')?>
+                        <?php $get_option_new = get_option('image_select_new') ?>
                         <?php list($width_new, $height_new) = getimagesize(get_option('image_select_new')); ?>
-                        <div><img src="<?=$get_option_new?>" alt="" width="<?=$width_new?>" height="<?=$height_new?>"></div>
+                        <div><img src="<?= $get_option_new ?>" alt="" width="<?= $width_new ?>"
+                                  height="<?= $height_new ?>"></div>
                         <input class="gf-upload-sticker-image-new"
                                id="upload-sticker-image-new"
                                name="image_select_new_button"
@@ -165,16 +168,17 @@ function gf_product_stickers_options_page()
                             </select>
                         </div>
                         <div class="row">
-                            <?php $get_option_soldout = get_option('image_select_soldout')?>
+                            <?php $get_option_soldout = get_option('image_select_soldout') ?>
                             <?php list($width_soldout, $height_soldout) = getimagesize($get_option_soldout); ?>
-                            <div><img src="<?= $get_option_soldout ?>" alt="" width="<?=$width_soldout?>" height="<?=$height_soldout?>"></div>
+                            <div><img src="<?= $get_option_soldout ?>" alt="" width="<?= $width_soldout ?>"
+                                      height="<?= $height_soldout ?>"></div>
                             <input class="gf-upload-sticker-image-soldout"
                                    id="upload-sticker-image-soldout"
                                    name="image_select_soldout_button"
                                    type="button"
                                    value="Izaberite sliku">
                             <input type="hidden" class="image_select_soldout" name="image_select_soldout"
-                                   value="<?=$get_option_soldout?>">
+                                   value="<?= $get_option_soldout ?>">
                         </div>
                     </div>
                 </div>
@@ -212,16 +216,17 @@ function gf_product_stickers_options_page()
                             </select>
                         </div>
                         <div class="row">
-                            <?php $get_option_sale = get_option('image_select_sale')?>
+                            <?php $get_option_sale = get_option('image_select_sale') ?>
                             <?php list($width_sale, $height_sale) = getimagesize($get_option_sale); ?>
-                            <div><img src="<?=$get_option_sale?>" alt="" width="<?=$width_sale?>" height="<?=$height_sale?>"></div>
+                            <div><img src="<?= $get_option_sale ?>" alt="" width="<?= $width_sale ?>"
+                                      height="<?= $height_sale ?>"></div>
                             <input class="gf-upload-sticker-image-sale"
                                    id="upload-sticker-image-sale"
                                    name="image_select_sale_button"
                                    type="button"
                                    value="Izaberite sliku">
                             <input type="hidden" class="image_select_sale" name="image_select_sale"
-                                   value="<?=$get_option_sale?>">
+                                   value="<?= $get_option_sale ?>">
                         </div>
                     </div>
                 </div>
@@ -294,7 +299,7 @@ function add_stickers_to_products_soldout($classes)
 }
 
 add_filter('woocommerce_sale_flash', 'add_stickers_to_products_on_sale', 10, 3);
-function add_stickers_to_products_on_sale($classes = null)
+function add_stickers_to_products_on_sale($classes = null, $id)
 {
     global $stickerConfig;
     if ($stickerConfig['image_position_sale_option'] === 'right') {
@@ -309,9 +314,13 @@ function add_stickers_to_products_on_sale($classes = null)
         wc_product_class();
         $classes = ob_get_clean();
     }
+    $product_sale_from_date = get_post_meta($id, '_sale_price_dates_from', true);
+    $product_sale_to_date = get_post_meta($id, '_sale_price_dates_to', true);
 
-    if (strstr($classes, 'sale') && !strstr($classes, 'outofstock')) {
-        return '<span class="gf-sticker gf-sticker--sale ' . $class . '"><img src="' . $stickerConfig['image_select_sale'] . '" alt="" height="64" width="64"></span>';
+    if ($product_sale_from_date !== '' && $product_sale_to_date !== '') {
+        if (strstr($classes, 'sale') && !strstr($classes, 'outofstock')) {
+            return '<span class="gf-sticker gf-sticker--sale ' . $class . '"><img src="' . $stickerConfig['image_select_sale'] . '" alt="" height="64" width="64"></span>';
+        }
     }
     return '';
 }
