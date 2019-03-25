@@ -314,8 +314,8 @@ function add_stickers_to_products_on_sale($classes = null, $id)
         wc_product_class();
         $classes = ob_get_clean();
     }
-    $product_sale_from_date = get_post_meta($id, '_sale_price_dates_from', true);
-    $product_sale_to_date = get_post_meta($id, '_sale_price_dates_to', true);
+    $product_sale_from_date = get_post_meta($id, 'sale_sticker_from', true);
+    $product_sale_to_date = get_post_meta($id, 'sale_sticker_to', true);
 
     if ($product_sale_from_date !== '' && $product_sale_to_date !== '') {
         if (strstr($classes, 'sale') && !strstr($classes, 'outofstock')) {
