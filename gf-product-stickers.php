@@ -40,7 +40,7 @@ function gf_public_css()
     wp_enqueue_style('gf-product-stickers-public-css', plugins_url() . '/gf-product-stickers/css/public.css');
 }
 
-add_action('wp_enqueue_scripts', 'gf_public_css');
+//add_action('wp_enqueue_scripts', 'gf_public_css');
 
 function gf_product_stickers_options_create_menu()
 {
