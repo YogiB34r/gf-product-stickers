@@ -263,9 +263,10 @@ function add_stickers_to_products_new($product = null)
         $class = 'gf-sticker--right';
     }
 
+    $sale_sticker_to = (int) get_post_meta($product->get_id(), 'sale_sticker_to', true);
     $postdatestamp = strtotime(get_the_time('Y-m-d'));
     $newness = 15;
-    if ((time() - (60 * 60 * 24 * $newness)) < $postdatestamp && !$product->is_on_sale() && !gf_is_product_sold_out($product)) {
+    if ((time() - (60 * 60 * 24 * $newness)) < $postdatestamp && ($sale_sticker_to == 0) && !gf_is_product_sold_out($product)) {
         //// If the product was published within the newness time frame display the new badge /////
         echo '<span class="gf-sticker gf-sticker--new ' . $class . '"><img src="' . $stickerConfig['image_select_new'] . '" alt="New Product Sticker" width="54" height="54"></span>';
     }
@@ -314,11 +315,12 @@ function add_stickers_to_products_on_sale($classes = null, $id)
         wc_product_class();
         $classes = ob_get_clean();
     }
-    $product_sale_from_date = get_post_meta($id, '_sale_price_dates_from', true);
-    $product_sale_to_date = get_post_meta($id, '_sale_price_dates_to', true);
+    $sale_sticker_active = get_post_meta($id, 'sale_sticker_active', true);
+    $sale_sticker_to = get_post_meta($id, 'sale_sticker_to', true);
 
-    if ($product_sale_from_date !== '' && $product_sale_to_date !== '') {
-        if (strstr($classes, 'sale') && !strstr($classes, 'outofstock')) {
+    if ($sale_sticker_active === 'yes' && $sale_sticker_to > time()) {
+//        if (strstr($classes, 'sale') && !strstr($classes, 'outofstock')) {
+        if (!strstr($classes, 'outofstock')) {
             return '<span class="gf-sticker gf-sticker--sale ' . $class . '"><img src="' . $stickerConfig['image_select_sale'] . '" alt="" height="64" width="64"></span>';
         }
     }
