@@ -45,7 +45,7 @@ function gf_public_css()
 function gf_product_stickers_options_create_menu()
 {
     //create new top-level menu
-    add_menu_page('Product stickers', 'Product stickers', 'administrator', 'product_stickers_options', 'gf_product_stickers_options_page', null, 99);
+    add_submenu_page('nss-panel','Podešavanje stikera', 'Podešavanje stikera', 'administrator', 'product_stickers_options', 'gf_product_stickers_options_page', 999);
 
     //call register settings function
     add_action('admin_init', 'register_gf_product_stickers_options');
